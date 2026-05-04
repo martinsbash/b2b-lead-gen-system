@@ -2,7 +2,7 @@
 
 An automated pipeline for finding, enriching, and qualifying local business leads using Apify + Claude AI. Built to power outreach for a web design agency targeting businesses with no website or outdated sites.
 
-This isn't a traditional codebase — it's a **prompt-driven workflow system** that combines Apify's web scraping actors with Claude's analysis and verification capabilities through Claude Desktop (Cowork mode).
+This isn't a traditional codebase. It's a **prompt-driven workflow system** that combines Apify's web scraping actors with Claude's analysis and verification capabilities through Claude Desktop (Cowork mode).
 
 ---
 
@@ -10,7 +10,7 @@ This isn't a traditional codebase — it's a **prompt-driven workflow system** t
 
 The system runs in 4 stages:
 
-### Stage 1: Scrape — Find Businesses via Google Maps
+### Stage 1: Scrape Businesses via Google Maps
 
 Use Apify's **Google Maps with Contact Details** actor to pull local businesses by category and location.
 
@@ -25,9 +25,9 @@ Claude calls the actor with parameters like:
 
 **What you get back:** A raw list of businesses with name, phone, address, Google rating, review count, and whether they have a website.
 
-### Stage 2: Verify — Confirm No Website Exists
+### Stage 2: Verify No Website Exists
 
-The raw scraper data isn't always accurate — some businesses have websites that just aren't listed on Google Maps. Claude cross-checks each lead:
+The raw scraper data isn't always accurate. Some businesses have websites that just aren't listed on Google Maps. Claude cross-checks each lead:
 
 **Example prompt:**
 
@@ -41,7 +41,7 @@ Claude runs parallel searches for each business across:
 
 Each lead gets a confidence rating: HIGH (confirmed no site anywhere), MEDIUM (possible site exists under different name), or flagged for manual check.
 
-### Stage 3: Enrich — Build a Complete Lead Profile
+### Stage 3: Enrich and Build a Lead Profile
 
 Once verified, Claude enriches each lead with actionable intel:
 
@@ -51,7 +51,7 @@ Once verified, Claude enriches each lead with actionable intel:
 
 Sources used:
 - Ontario provincial regulators (College of Physicians, CPA Ontario, etc.)
-- Google Business Profile review responses (owner names often show here)
+- Google Business Profile review responses (owner names often appear here)
 - Facebook/Instagram profiles
 - Ontario Business Registry
 
@@ -62,14 +62,14 @@ Sources used:
 - Online presence summary (Google Maps only, Facebook only, etc.)
 - Pitch angle (no website vs. outdated website vs. upgrade opportunity)
 
-### Stage 4: Organize — Export to Spreadsheet
+### Stage 4: Organize and Export to Spreadsheet
 
 Claude compiles everything into a structured Excel file with multiple sheets:
 
-- **Confirmed No Website** — Gold leads, verified across multiple sources
-- **Website Upgrade Prospects** — Have a site but it's outdated/thin
-- **Needs Re-Verification** — Low confidence, check manually
-- **Pipeline Summary** — Stats and status tracking
+- **Confirmed No Website:** Gold leads, verified across multiple sources
+- **Website Upgrade Prospects:** Have a site but it's outdated/thin
+- **Needs Re-Verification:** Low confidence, check manually
+- **Pipeline Summary:** Stats and status tracking
 
 ---
 
@@ -80,7 +80,7 @@ Claude compiles everything into a structured Excel file with multiple sheets:
 Sign up at [apify.com](https://apify.com). The free tier gives you enough credits to get started.
 
 **Key actor you need:**
-- [Google Maps with Contact Details](https://apify.com/lukaskrivka/google-maps-with-contact-details) by Lukas Krivka — this is the core scraper that pulls business listings
+- [Google Maps with Contact Details](https://apify.com/lukaskrivka/google-maps-with-contact-details) by Lukas Krivka, the core scraper that pulls business listings by location and category
 
 ### 2. Claude Desktop with Apify MCP
 
@@ -93,7 +93,7 @@ Connect Apify to Claude Desktop so Claude can run scrapers directly from convers
 
 ### 3. Claude Desktop with Browser Tools (Optional but Recommended)
 
-For the verification and enrichment stages, Claude uses web search and browser tools to cross-check leads. Having Claude in Chrome or web search enabled makes this much more accurate.
+For the verification and enrichment stages, Claude uses web search and browser tools to cross-check leads. Having Claude in Chrome or web search enabled improves accuracy significantly.
 
 ---
 
@@ -111,25 +111,9 @@ For the verification and enrichment stages, Claude uses web search and browser t
 
 > "For each confirmed no-website lead, find the owner's name using Google reviews, Facebook, and provincial registries. Also note their Google star rating, review count, and what services they appear to offer. I need this for cold calling."
 
-### Build a daily lead batch
-
-> "Run the Google Maps scraper for 'physiotherapy clinics' in Bowmanville, Port Perry, and Lindsay, Ontario. Verify which ones don't have websites. Add the verified ones to my spreadsheet with today's date. This is my daily lead batch."
-
 ### Prep for a specific cold call
 
-> "I'm about to call Brandon's Auto Repair in Oshawa. Pull everything you can find about them — Google rating, reviews, whether they have a website, owner name, address, phone. Give me a call script based on my pitch: I've already built them a demo website."
-
----
-
-## The Full Workflow (Daily Use)
-
-1. **Morning:** Ask Claude to run a Google Maps scrape for a new city + category combo
-2. **Verify:** Claude cross-checks each lead across Google, YP, Facebook
-3. **Enrich:** Claude pulls owner names, ratings, and pitch angles
-4. **Export:** Claude builds/updates your Excel tracking sheet
-5. **Outreach:** Cold call using the enriched data + personalized scripts
-6. **Follow-up:** Send email templates based on call outcome (interested, voicemail, rejected, callback)
-7. **Track:** Log results in spreadsheet for the self-improving feedback loop
+> "I'm about to call Brandon's Auto Repair in Oshawa. Pull everything you can find about them: Google rating, reviews, whether they have a website, owner name, address, phone. Give me a call script based on my pitch: I've already built them a demo website."
 
 ---
 
@@ -137,7 +121,7 @@ For the verification and enrichment stages, Claude uses web search and browser t
 
 | Component | Tool | Purpose |
 |-----------|------|---------|
-| Scraping | Apify — Google Maps actor | Pull business listings by location and category |
+| Scraping | Apify (Google Maps actor) | Pull business listings by location and category |
 | Verification | Claude + Web Search | Cross-check leads across Google, YP, Facebook |
 | Enrichment | Claude + RAG Web Browser | Find owner names, emails, and business intel |
 | Analysis | Claude AI | Score leads, generate call scripts, write emails |
@@ -146,18 +130,6 @@ For the verification and enrichment stages, Claude uses web search and browser t
 
 ---
 
-## What This System Has Produced
-
-- 50+ verified leads per week across Ontario
-- Leads organized by tier: no website (highest value), outdated website (demo pitch), active website (skip)
-- Personalized cold call scripts generated per lead
-- Follow-up email templates adapted based on call outcomes
-- Self-improving loop: track which scripts, subject lines, and approaches get replies
-
----
-
 ## Author
 
-Built by [Martins Bash](https://github.com/martinsbash) — Founder of [Afro Creative Group](https://github.com/martinsbash/afrocreativegroup), a web and creative agency in Ontario, Canada.
-
-This system was built out of real daily use — not as a theoretical project. Every feature exists because it solved an actual problem in the outreach workflow.
+Built by [Martins Bash](https://github.com/martinsbash), co-founder of [Afro Creative Group](https://github.com/martinsbash/afrocreativegroup), a web and creative agency in Ontario, Canada.
