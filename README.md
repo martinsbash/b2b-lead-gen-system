@@ -121,9 +121,3 @@ For verification and enrichment, Claude in Chrome improves accuracy significantl
 ## Status
 
 The current repo documents the workflow as it runs today. The next version is being rebuilt as a proper end-to-end tool that produces structured output without needing manual prompts at each stage.
-
----
-
-## Author
-
-Built by [Martins Bash](https://github.com/martinsbash). AI trainer and researcher; co-founder of [Afro Creative Group](https://afrocreativegroup.lovable.app), a web and creative agency in Ontario, Canada.
