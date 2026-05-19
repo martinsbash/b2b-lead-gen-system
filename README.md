@@ -61,7 +61,7 @@ Claude compiles everything into a structured Excel file:
 
 Here is what a completed lead sheet looks like:
 
-![Lead output example](assets/output-example.png)
+![Lead output example](Outputexample.png)
 
 Columns include: Business Name, Contact Name, Title, Category, City, State, Email, Phone, Instagram, Website, Business Size, Market Position, and Notes.
 
