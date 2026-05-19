@@ -113,7 +113,7 @@ For verification and enrichment, Claude in Chrome improves accuracy significantl
 | Verification | Claude + Web Search | Cross-check leads across Google, YP, Facebook |
 | Enrichment | Claude + RAG Web Browser | Find owner names, emails, and business intel |
 | Analysis | Claude AI | Score leads, generate call scripts, write emails |
-| Storage | Excel (.xlsx) | Track leads, pipeline status, and outreach results |
+| Storage | Excel (.xlsx), Google sheet | Track leads, pipeline status, and outreach results |
 | Automation | Claude Scheduled Tasks | Auto-run daily lead batches on a schedule |
 
 ---
