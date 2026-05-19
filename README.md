@@ -1,75 +1,69 @@
 # B2B Lead Gen System
 
-An automated pipeline for finding, enriching, and qualifying local business leads using Apify + Claude AI. Built to power outreach for a web design agency targeting businesses with no website or outdated sites.
+A prompt-driven workflow for finding, verifying, and qualifying local business leads using Apify and Claude AI. Started as outreach infrastructure for a web design agency; built to be general enough to work across most B2B prospecting use cases.
 
-This isn't a traditional codebase. It's a **prompt-driven workflow system** that combines Apify's web scraping actors with Claude's analysis and verification capabilities through Claude Desktop (Cowork mode).
+This is not a traditional codebase. It is a workflow system that runs through Claude conversation, with Apify handling scraping and Claude handling verification, enrichment, and output.
 
 ---
 
 ## How It Works
 
-The system runs in 4 stages:
+The workflow runs in four stages.
 
 ### Stage 1: Scrape Businesses via Google Maps
 
-Use Apify's **Google Maps with Contact Details** actor to pull local businesses by category and location.
+Use Apify's Google Maps with Contact Details actor to pull local businesses by category and location.
 
-**Example prompt to Claude (with Apify MCP connected):**
+Example prompt (with Apify MCP connected):
 
 > "Find me 20 HVAC businesses in Oshawa, Ontario that don't have a website. Use the Google Maps scraper."
 
-Claude calls the actor with parameters like:
-- `searchTerms`: "HVAC Oshawa Ontario", "plumber Whitby Ontario", etc.
-- `maxResults`: 20
-- Returns: business name, address, phone, rating, review count, website (or lack of)
-
-**What you get back:** A raw list of businesses with name, phone, address, Google rating, review count, and whether they have a website.
+Claude calls the actor and returns: business name, address, phone, rating, review count, and whether a website is listed.
 
 ### Stage 2: Verify No Website Exists
 
-The raw scraper data isn't always accurate. Some businesses have websites that just aren't listed on Google Maps. Claude cross-checks each lead:
+Scraper data is not always accurate. Claude cross-checks each lead across Google Search, Yellow Pages, and Facebook to confirm whether a website actually exists.
 
-**Example prompt:**
-
-> "For each business on this list, search Google, Yellow Pages, and Facebook to confirm they actually don't have a website. Only keep the ones that are truly confirmed no-website."
-
-Claude runs parallel searches for each business across:
-- Google Search (business name + city)
-- YP.ca / Yellow Pages listing
-- Facebook business page
-- Instagram presence
-
-Each lead gets a confidence rating: HIGH (confirmed no site anywhere), MEDIUM (possible site exists under different name), or flagged for manual check.
+Each lead gets a confidence rating:
+- **HIGH** - confirmed no website anywhere
+- **MEDIUM** - possible site exists under a different name
+- **Flag** - needs manual check
 
 ### Stage 3: Enrich and Build a Lead Profile
 
-Once verified, Claude enriches each lead with actionable intel:
+Once verified, Claude enriches each lead with actionable intel: owner name, Google review highlights, services offered, market positioning, and a pitch angle for outreach.
 
-**Example prompt:**
+Sources: Ontario provincial registries, Google Business Profile, Facebook, Instagram.
 
-> "For each confirmed lead, find the owner's name, pull their Google review highlights, check what services they offer, and note anything useful for a cold call."
-
-Sources used:
-- Ontario provincial regulators (College of Physicians, CPA Ontario, etc.)
-- Google Business Profile review responses (owner names often appear here)
-- Facebook/Instagram profiles
-- Ontario Business Registry
-
-**Output per lead:**
+Output per lead:
 - Business name, category, address, phone, email (if found)
-- Owner/contact name
-- Google rating + review count
-- Online presence summary (Google Maps only, Facebook only, etc.)
-- Pitch angle (no website vs. outdated website vs. upgrade opportunity)
+- Owner or contact name and title
+- Google rating and review count
+- Online presence summary
+- Market position and business size
+- Notes (awards, press mentions, social proof, anything useful before a call)
+- Pitch angle (no website / outdated site / upgrade opportunity)
 
-### Stage 4: Organize and Export to Spreadsheet
+### Stage 4: Organize and Export
 
-Claude compiles everything into a structured Excel file with multiple sheets:
+Claude compiles everything into a structured Excel file:
 
-- **Confirmed No Website:** Gold leads, verified across multiple sources
-- **Website Upgrade Prospects:** Have a site but it's outdated/thin
-- **Needs Re-Verification:** Low confidence, check manually
-- **Pipeline Summary:** Stats and status tracking
+| Sheet | Contents |
+|-------|----------|
+| Confirmed No Website | Gold leads, verified across multiple sources |
+| Website Upgrade Prospects | Have a site but it needs work |
+| Needs Re-Verification | Low confidence, check manually |
+| Pipeline Summary | Stats and status tracking |
+
+---
+
+## Output Example
+
+Here is what a completed lead sheet looks like:
+
+![Lead output example](assets/output-example.png)
+
+Columns include: Business Name, Contact Name, Title, Category, City, State, Email, Phone, Instagram, Website, Business Size, Market Position, and Notes.
 
 ---
 
@@ -77,43 +71,37 @@ Claude compiles everything into a structured Excel file with multiple sheets:
 
 ### 1. Apify Account
 
-Sign up at [apify.com](https://apify.com). The free tier gives you enough credits to get started.
+Sign up at [apify.com](https://apify.com). The free tier gives enough credits to get started.
 
-**Key actor you need:**
-- [Google Maps with Contact Details](https://apify.com/lukaskrivka/google-maps-with-contact-details) by Lukas Krivka, the core scraper that pulls business listings by location and category
+Key actor: **Google Maps with Contact Details** by Lukas Krivka.
 
 ### 2. Claude Desktop with Apify MCP
 
-Connect Apify to Claude Desktop so Claude can run scrapers directly from conversation:
-
 1. Open Claude Desktop
-2. Go to Settings > MCP Servers (or install via the Apify MCP plugin)
+2. Go to Settings > MCP Servers
 3. Add the Apify actors MCP server with your API key
-4. Once connected, Claude can call actors like `lukaskrivka/google-maps-with-contact-details` directly
 
-### 3. Claude Desktop with Browser Tools (Optional but Recommended)
+Once connected, Claude can call actors directly from conversation.
 
-For the verification and enrichment stages, Claude uses web search and browser tools to cross-check leads. Having Claude in Chrome or web search enabled improves accuracy significantly.
+### 3. Claude in Chrome (Optional but Recommended)
+
+For verification and enrichment, Claude in Chrome improves accuracy significantly by enabling real-time web search and cross-checking.
 
 ---
 
 ## Example Prompts
 
-### Find leads in a specific area
+**Find leads:**
+> "Use the Google Maps scraper to find 30 businesses in the GTA in these categories: hair salons, barbershops, and nail salons. Filter for ones without a website."
 
-> "Use the Google Maps scraper to find 30 businesses in the GTA (Toronto, Mississauga, Scarborough, Markham) in these categories: hair salons, barbershops, and nail salons. Filter for ones without a website."
+**Verify and clean:**
+> "Here are 30 leads from the scraper. For each one, confirm whether they actually have a website. Create two lists: confirmed no website, and has a website."
 
-### Verify and clean a lead list
+**Enrich for outreach:**
+> "For each confirmed no-website lead, find the owner's name, Google rating, review count, and what services they offer. I need this for cold calling."
 
-> "Here are 30 leads from the scraper. For each one, search Google and Yellow Pages to confirm whether they actually have a website or not. Create two lists: confirmed no website, and has a website. Include the URL for any that do have sites."
-
-### Enrich leads for cold outreach
-
-> "For each confirmed no-website lead, find the owner's name using Google reviews, Facebook, and provincial registries. Also note their Google star rating, review count, and what services they appear to offer. I need this for cold calling."
-
-### Prep for a specific cold call
-
-> "I'm about to call Brandon's Auto Repair in Oshawa. Pull everything you can find about them: Google rating, reviews, whether they have a website, owner name, address, phone. Give me a call script based on my pitch: I've already built them a demo website."
+**Prep for a specific call:**
+> "I'm about to call Brandon's Auto Repair in Oshawa. Pull everything you can find about them and give me a call script based on my pitch: I've already built them a demo website."
 
 ---
 
@@ -130,6 +118,12 @@ For the verification and enrichment stages, Claude uses web search and browser t
 
 ---
 
+## Status
+
+The current repo documents the workflow as it runs today. The next version is being rebuilt as a proper end-to-end tool that produces structured output without needing manual prompts at each stage.
+
+---
+
 ## Author
 
-Built by [Martins Bash](https://github.com/martinsbash), co-founder of [Afro Creative Group](https://github.com/martinsbash/afrocreativegroup), a web and creative agency in Ontario, Canada.
+Built by [Martins Bash](https://github.com/martinsbash). AI trainer and researcher; co-founder of [Afro Creative Group](https://afrocreativegroup.lovable.app), a web and creative agency in Ontario, Canada.
