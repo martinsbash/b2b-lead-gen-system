@@ -1,4 +1,4 @@
-# B2B Lead Gen System
+# B2B Lead Gen System (Basic Workflow)
 
 A prompt-driven workflow for finding, verifying, and qualifying local business leads using Apify and Claude AI. Started as outreach infrastructure for a web design agency; built to be general enough to work across most B2B prospecting use cases.
 
